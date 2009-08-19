@@ -1,14 +1,26 @@
 class Buildr
-  
-  def method_missing(tag,*args,&block)
-    content = args.empty? ? yield : args.first
-    render(tag,content) 
+  def initialize
+    @level = 0
+    @buffer = ""
   end
   
-  def render(tag, content)
-    buffer = ""
-    buffer += "<#{tag}>"
-    buffer += content 
-    buffer += "</#{tag}>"
+  def method_missing(tag,*args,&block)
+    render(tag) do
+      unless args.empty?
+        args.first 
+      else
+        @level += 1
+        @buffer = ""
+        output = yield
+        @level -= 1
+        output
+      end
+    end
+  end
+  
+  def render(tag, &content)
+    @buffer += "<#{tag}>"
+    @buffer += yield 
+    @buffer += "</#{tag}>"
   end
 end
