@@ -5,22 +5,33 @@ class Buildr
   end
   
   def method_missing(tag,*args,&block)
-    render(tag) do
+    render(tag, block_given?) do
       unless args.empty?
-        args.first 
+        args.first
       else
-        @level += 1
-        @buffer = ""
-        output = yield
-        @level -= 1
-        output
+        nest do
+          block.call        
+        end
       end
     end
   end
   
-  def render(tag, &content)
-    @buffer += "<#{tag}>"
+  def nest(&block)
+    @level += 1
+    @buffer = ""
+    output = "\n" + yield
+    @level -= 1
+    output
+  end
+  
+  def render(tag, indent_closing, &content)
+    @buffer += indent + "<#{tag}>"
     @buffer += yield 
-    @buffer += "</#{tag}>"
+    @buffer += indent if indent_closing 
+    @buffer += "</#{tag}>\n"
+  end
+  
+  def indent
+    "\t" * @level
   end
 end
