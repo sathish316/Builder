@@ -1,0 +1,12 @@
+<phonebook>
+	<contact>
+		<full_name>John Doe</full_name>
+		<email>john.doe@gmail.com</email>
+		<phone>121-101</phone>
+	</contact>
+	<contact>
+		<full_name>William Smith</full_name>
+		<email>william.smith@gmail.com</email>
+		<phone>121-102</phone>
+	</contact>
+</phonebook>
